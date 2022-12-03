@@ -8,14 +8,11 @@ fn get_priority(c: char) -> u32 {
 }
 
 fn main() {
-    let input = include_str!("./../../inputs/day3.txt");
+    let input = include_str!("./../../inputs/day3.txt").trim();
     let mut result: u32 = 0;
     let mut previous_elf_group: Vec<&str> = vec![];
     let mut result2: u32 = 0;
     for line in input.split("\n") {
-        if line.is_empty() {
-            continue;
-        }
         let (a, b) = line.split_at(line.len() / 2);
         'chars: for c in a.chars() {
             if b.contains(c) {
