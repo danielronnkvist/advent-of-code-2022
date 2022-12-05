@@ -22,26 +22,37 @@ fn main() {
         }
     }
 
+    let mut p1 = crates_map.clone();
+    let mut p2 = crates_map;
+
     for operation in operations.split("\n") {
         if operation.is_empty() {
             continue;
         }
         let operation: Vec<&str> = operation.split(" ").collect();
-        let amount = u32::from_str(operation[1]).unwrap();
+        let amount = u32::from_str(operation[1]).unwrap() as usize;
         let from = u32::from_str(operation[3]).unwrap();
         let to = u32::from_str(operation[5]).unwrap();
 
-        for i in 0..amount {
-            let id = crates_map.get_mut(&from).unwrap().pop().unwrap();
-            crates_map.get_mut(&to).unwrap().push(id);
+        for _ in 0..amount {
+            let id = p1.get_mut(&from).unwrap().pop().unwrap();
+            p1.get_mut(&to).unwrap().push(id);
         }
+
+        let from_vec = p2.get_mut(&from).unwrap();
+        let mut taken: Vec<_> = from_vec.split_off(from_vec.len() - amount);
+        p2.get_mut(&to).unwrap().append(&mut taken);
     }
 
-    let mut result: String = String::new();
-
-    for i in 1..=crates_map.len() {
-        result += &crates_map.get(&(i as u32)).unwrap().last().unwrap().to_string();
+    let mut result1: String = String::new();
+    for i in 1..=p1.len() {
+        result1 += &p1.get(&(i as u32)).unwrap().last().unwrap().to_string();
     }
+    dbg!(result1);
 
-    dbg!(result);
+    let mut result2: String = String::new();
+    for i in 1..=p2.len() {
+        result2 += &p2.get(&(i as u32)).unwrap().last().unwrap().to_string();
+    }
+    dbg!(result2);
 }
